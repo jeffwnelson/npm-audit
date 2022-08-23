@@ -1,0 +1,17 @@
+name: 'NPM Audit Report'
+branding:
+  icon: 'alert-circle'
+  color: 'orange'
+description: 'Audit the `package.json` of a project and make a comment on the associated PR to highlight any dependency issues'
+inputs:
+  package_json_path:
+    description: 'Folder within which the package.json lives (relative to project root)'
+    required: true
+    default: './'
+  github_token:
+    description: 'GitHub access token'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'index.js'
