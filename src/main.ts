@@ -1,28 +1,23 @@
 import { getInput, setFailed } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
+import { exec } from '@actions/exec';
+
+const WORKING_DIR: string = getInput('working-dir') ?? '.';
 
 const main = async () => {
-    const stdin = process.openStdin();
+    const message = await exec(`npm audit --production`);
 
-    let auditJson = "";
+    const github_token = getInput('github_token');
 
-    stdin.on('data', (chunk: string): void => {
-        auditJson += chunk;
-    });
+    if (context.payload.pull_request == null) {
+        setFailed('No pull request found.');
+        return;
+    }
 
-    stdin.on('end', async (): Promise<void> => {
-        console.log(auditJson);
-        const message = auditJson;
-        const github_token = getInput('github_token');
+    const pull_request_number = context.payload.pull_request.number;
 
-        if (context.payload.pull_request == null) {
-            setFailed('No pull request found.');
-            return;
-        }
-        const pull_request_number = context.payload.pull_request.number;
+    await createCommentOnPr(context.repo, pull_request_number, message.toString(), github_token);
 
-        await createCommentOnPr(context.repo, pull_request_number, message, github_token);
-    });
 }
 
 const createCommentOnPr = async (repoContext: { owner: string, repo: string }, prNumber: number, message: string, token: string) => {
