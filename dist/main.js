@@ -87,7 +87,7 @@ var createCommentOnPr = function (repoContext, prNumber, message, token) { retur
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 octokit = (0, github_1.getOctokit)(token);
-                return [4 /*yield*/, octokit.rest.issues.createComment(__assign(__assign({}, repoContext), { issue_number: prNumber, body: message }))];
+                return [4 /*yield*/, octokit.rest.issues.createComment(__assign(__assign({}, repoContext), { issue_number: prNumber, body: "Body: ".concat(message) }))];
             case 1:
                 _a.sent();
                 return [3 /*break*/, 3];

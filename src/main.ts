@@ -32,7 +32,7 @@ const createCommentOnPr = async (repoContext: { owner: string, repo: string }, p
         await octokit.rest.issues.createComment({
             ...repoContext,
             issue_number: prNumber,
-            body: 'test'
+            body: `Body: ${message}`
         });
 
     } catch (error) {
